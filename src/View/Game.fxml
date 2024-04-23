@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="bg" stylesheets="@CSS/Game.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.GameController">
+   <children>
+      <MenuBar prefHeight="57.0" prefWidth="1197.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem fx:id="loadGame" mnemonicParsing="false" onAction="#loadGame" text="Load" />
+              <MenuItem fx:id="exitGame" mnemonicParsing="false" onAction="#exitGame" text="Exit" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox fx:id="containerNumber" layoutX="-3.0" layoutY="190.0" prefHeight="100.0" prefWidth="200.0" spacing="25.0" styleClass="containerBox" />
+      <Text layoutX="29.0" layoutY="770.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text: ">
+         <font>
+            <Font size="40.0" />
+         </font>
+      </Text>
+      <TextField fx:id="textInput" layoutX="136.0" layoutY="737.0" prefHeight="43.0" prefWidth="370.0" />
+      <Button layoutX="546.0" layoutY="718.0" mnemonicParsing="false" onAction="#inputText" prefHeight="85.0" prefWidth="162.0" text="Check" />
+      <Text fx:id="numberHealth" layoutX="894.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="76.80195914289493" x="20.0" y="50.0">
+         <font>
+            <Font size="50.0" />
+         </font>
+      </Text>
+      <Text fx:id="stageGame" layoutX="202.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="342.68091583251953" x="100.0" y="200.0">
+         <font>
+            <Font size="50.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="992.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../ass/heart-solid.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

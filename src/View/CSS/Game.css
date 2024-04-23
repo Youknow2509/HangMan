@@ -1,0 +1,18 @@
+.bg {
+     -fx-pref-width: 1200px;
+        -fx-pref-height: 800px;
+        -fx-background-color: #58A67C;
+        -fx-alignment: center
+}
+
+.boxNumber {
+    -fx-pref-width: 75px;
+        -fx-pref-height: 75px;
+        -fx-background-color: #D9D9D9;
+}
+
+.containerBox {
+    -fx-pref-width: 1200px;
+        -fx-pref-height: 148px;
+        -fx-alignment: center;
+}

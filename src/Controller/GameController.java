@@ -1,101 +1,138 @@
 package Controller;
 
 import Model.Game;
-import Model.Validation;
-import Unitils.InputException;
-import View.View;
-import Config.Config;
+import Unitils.FileToListGame;
+import Unitils.RandomGame;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+
+import java.io.IOException;
 
 public class GameController {
+    // Var fxml
+    @FXML
+    private AnchorPane anchorPane;
+    @FXML
+    private MenuItem loadGame;
+    @FXML
+    private MenuItem exitGame;
+    @FXML
+    private HBox containerNumber;
+    @FXML
+    private Text numberHealth;
+    @FXML
+    private TextField textInput;
+    @FXML
+    private Text stageGame;
     // Var
-    private Game game = null;
-    private Validation validation = null;
-    private boolean loop = true;
-    String charInput = "";
-    // Constructor
-    public GameController(Game game) {
-        super();
+    private Game game;
+    private Button buttonClicked;
+    // Init
+    public void init(Game game) {
         this.game = game;
-        validation = new Validation(game.getWord());
+        createButton();
+
+        numberHealth.setText(String.valueOf(game.getMax_n()));
+        stageGame.setText("");
     }
-    // Application
-    public void application() {
-        while (loop) {
-            View.showWord(game.getHidden(), game.getMax_n());
-            inputChar();
-            if (validation.check(charInput.charAt(0))) {
-                changeChar(charInput.charAt(0));
+
+    // Creat button with game
+    private void createButton() {
+        for (int i = 0; i < game.getLenWord(); i++) {
+            Button bt;
+            if (game.getHidden().charAt(i) == ' '){
+                bt = new Button(String.valueOf("_"));
             } else {
-                View.thongbaonnhapsai();
+                bt = new Button(String.valueOf(game.getHidden().charAt(i)));
+            }
+
+            bt.setStyle("" +
+                    "-fx-font-size: 20px; " +
+                    "-fx-font-weight: bold; " +
+                    "-fx-pref-width: 75px; " +
+                    "-fx-pref-height: 75px; " +
+                    "-fx-text-alignment: center;" +
+                    "-fx-fill: #000000;" +
+                    "-fx-background-color: #ffffff;"
+            );
+            bt.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    event -> {
+                        Button button = (Button) event.getSource();
+                        buttonClicked = button;
+                    }
+            );
+            bt.setId(String.valueOf(i));
+            containerNumber.getChildren().add(bt);
+        }
+    }
+
+    // Input text
+    public void inputText(ActionEvent event) {
+        String str = textInput.getText();
+        if (str != null && !str.equals("") && str.length() == 1
+            && buttonClicked != null && buttonClicked.getText().equals("*")) {
+
+            int indexChar = buttonClicked.getId().charAt(0) - '0';
+            if (game.getWord().charAt(indexChar) == str.charAt(0)) {
+                String hidden = game.getHidden();
+                buttonClicked.setText(str);
+                hidden = hidden.substring(0, indexChar) + str + hidden.substring(indexChar + 1);
+                game.setHidden(hidden);
+            } else {
                 game.setMax_n(game.getMax_n() - 1);
+                numberHealth.setText(String.valueOf(game.getMax_n()));
             }
-            // Da tim het ki tu
-            if (validation.checkWin(game.getHidden())) {
-                View.win();
-                loop = false;
-                View.result(game.getWord());
-            }
-            // Het luot tim
-            if (validation.checkLose(game.getMax_n())) {
-                View.lose();
-                loop = false;
-                View.result(game.getWord());
-            }
+        }
+        gameCheck();
+        textInput.setText("");
+    }
+
+    // Game check
+    private void gameCheck() {
+        if (game.getWord().equals(game.getHidden())) {
+            stageGame.setText("Win");
+        }
+        if (game.getMax_n() <= 0) {
+            stageGame.setText("Lose");
         }
     }
 
-    // Nhap mot ky tu
-    private void inputChar() {
-        View.nhap();
+    // help load game
+    private void helpLoadGame() {
         try {
-            charInput = Config.getScanner().nextLine();
-            if (charInput.length() != 1 ) {
-                throw new InputException("Chi duoc nhap 1 ky tu");
-            } // TODO thieu check so
-        } catch (InputException e) {
+            FileToListGame fileToListGame = new FileToListGame("/Users/v/code/java/projects/Hanman/src/DataBase/data.txt");
+            fileToListGame.readFile();
+            game =  RandomGame.random(fileToListGame.getListGame());
+        } catch (Exception e) {
             e.printStackTrace();
-            inputChar();
         }
+        containerNumber.getChildren().clear();
+        init(game);
     }
-    // Thay doi ki tu
-    private void changeChar(Character c) {
-        for (int i = 0; i < game.getWord().length(); i++) {
-            if (game.getWord().charAt(i) == c) {
-                game.setHidden(game.getHidden().substring(0, i) + c + game.getHidden().substring(i + 1));
-            }
+
+    // Menubar load - Load new game
+    public void loadGame(ActionEvent event) {
+        helpLoadGame();
+    }
+
+    // Exit
+    public void exitGame(ActionEvent event) {
+        System.exit(0);
+    }
+
+    // SetTimeOutInit
+    private void setTimeOutInit() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-    }
-    // Getter and setter
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public Validation getValidation() {
-        return validation;
-    }
-
-    public void setValidation(Validation validation) {
-        this.validation = validation;
-    }
-
-    public boolean isLoop() {
-        return loop;
-    }
-
-    public void setLoop(boolean loop) {
-        this.loop = loop;
-    }
-
-    public String getCharInput() {
-        return charInput;
-    }
-
-    public void setCharInput(String charInput) {
-        this.charInput = charInput;
     }
 }
