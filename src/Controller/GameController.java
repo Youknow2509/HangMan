@@ -45,6 +45,15 @@ public class GameController {
 
     // Creat button with game
     private void createButton() {
+        String css = "-fx-font-size: 20px; " +
+                "-fx-font-weight: bold; " +
+                "-fx-pref-width: 75px; " +
+                "-fx-pref-height: 75px; " +
+                "-fx-text-alignment: center;" +
+                "-fx-fill: #000000;" +
+                "-fx-background-color: #ffffff;";
+        String hover = css + "-fx-opacity: 0.5;";
+        String donthover = css + "-fx-opacity: 1;";
         for (int i = 0; i < game.getLenWord(); i++) {
             Button bt;
             if (game.getHidden().charAt(i) == ' '){
@@ -53,14 +62,8 @@ public class GameController {
                 bt = new Button(String.valueOf(game.getHidden().charAt(i)));
             }
 
-            bt.setStyle("" +
-                    "-fx-font-size: 20px; " +
-                    "-fx-font-weight: bold; " +
-                    "-fx-pref-width: 75px; " +
-                    "-fx-pref-height: 75px; " +
-                    "-fx-text-alignment: center;" +
-                    "-fx-fill: #000000;" +
-                    "-fx-background-color: #ffffff;"
+            bt.setStyle(
+                    css
             );
             bt.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     event -> {
@@ -68,6 +71,8 @@ public class GameController {
                         buttonClicked = button;
                     }
             );
+            bt.setOnMouseEntered(e -> bt.setStyle(hover));
+            bt.setOnMouseExited(e -> bt.setStyle(donthover));
             bt.setId(String.valueOf(i));
             containerNumber.getChildren().add(bt);
         }
